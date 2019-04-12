@@ -4,12 +4,12 @@ import matplotlib.pyplot as plt
 
 env = gym.make('CartPole-v0')
 
-MAXSTATES = 10**4
-GAMMA = 0.9
-ALPHA = 0.01
+MAXSTATES = 10**4 # amount of states in q-table
+GAMMA = 0.9 # discount rate
+ALPHA = 0.01 # learning rate
 
 
-def max_dict(d):
+def max_dict(d): # returns highest q-value when given a key
 	max_v = float('-inf')
 	for key, val in d.items():
 		if val > max_v:
@@ -66,7 +66,7 @@ def play_one_game(bins, Q, eps=0.5):
 
 	while not done:
 		cnt += 1
-		# np.random.randn() seems to yield a random action 50% of the time ?
+		# np.random.randn() seems to yield a random action 50% of the time 
 		if np.random.uniform() < eps:
 			act = env.action_space.sample() # epsilon greedy
 		else:
@@ -79,12 +79,12 @@ def play_one_game(bins, Q, eps=0.5):
 		if done and cnt < 200:
 			reward = -300
 
-		state_new = get_state_as_string(assign_bins(observation, bins))
+		state_new = get_state_as_string(assign_bins(observation, bins)) # state_new is a key for the q-table
 
 		print(state)
 		print(act)
 		a1, max_q_s1a1 = max_dict(Q[state_new])
-		Q[state][act] += ALPHA*(reward + GAMMA*max_q_s1a1 - Q[state][act])
+		Q[state][act] += ALPHA*(reward + GAMMA*max_q_s1a1 - Q[state][act]) # Q-Learning formula
 		state, act = state_new, a1
 
 	return total_reward, cnt
