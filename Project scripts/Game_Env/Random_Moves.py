@@ -14,8 +14,7 @@ import os
 
 def function_intercept(intercepted_func, intercepting_func):
     """Intercepts a method call and calls the supplied intercepting_func
-    with the result of it's call and it's arguments.  Stolen wholesale
-    from PyGamePlayer.
+    with the result of it's call and it's arguments.
     - param intercepted_func: The function we are going to intercept
     :param intercepting_func: The function that will get called after
     the intercepted func. It is supplied the return value of the
@@ -76,9 +75,7 @@ class RandomPlayer(object):
     ####################################
     def choose_next_action(self):
 
-        # This code chooses the next action.  This means either
-        # choosing a random action, based on the current probability
-        # value, or use the NN to generate the next action.
+        # This code chooses the next random action. 
 
         new_action = np.zeros([self.num_actions])
 
@@ -96,8 +93,7 @@ class RandomPlayer(object):
 
     def get_keys_pressed(self, reward):
 
-        # This is the real work horse of the code.  Here is where the
-        # actual work gets done.
+        # Here is where the actual work gets done.
 
         # Get the current state of the game.
         current_state = cartpole.get_state()
