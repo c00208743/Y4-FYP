@@ -18,16 +18,16 @@ class RandomCartPolePlayer(PyGamePlayer):
         """
         super(RandomCartPolePlayer, self).__init__(run_real_time=True)
         self.last_score = 0
-        self.training_games = 100
-        self.num_actions = 2
-        self.alpha = 1e-3
-        self.goal_steps = 500
-        self.score_requirement = 30
-        self.play_games = 10
+        self.training_games = 100 #amount of training games / samples
+        self.num_actions = 2 #agent can choose to move left or right
+        self.alpha = 1e-3 #learning rate
+        self.goal_steps = 500 # amount of frames / choices for the agent to make
+        self.score_requirement = 30 # score requirement to be used as training data
+        self.play_games = 10 # how many games to be played
         self.training = True
         self.playing = False
         self.training_data = []
-        self.scores = []
+        self.scores = [] # array of scores at the end of the game
         self.accepted_scores = []
         self.play_scores = []
         self.choices = []
@@ -40,7 +40,7 @@ class RandomCartPolePlayer(PyGamePlayer):
         if self.training ==True:
             self.action_index = random.randrange(0, self.num_actions)
         else:
-            ##else use NN
+            ##else use NN to predict action
             if len(self.prev_obseration) == 0:
                 self.action_index = random.randrange(0, self.num_actions)
             else:
@@ -56,7 +56,8 @@ class RandomCartPolePlayer(PyGamePlayer):
 
     def get_observation(self):
         self.observation = cartpole.get_state()
-
+        
+        ## remember env and action choosen 
         if self.training ==True:
             if len(self.prev_obseration) > 0:
                 self.game_memory.append([self.prev_obseration, self.action_index])
@@ -76,7 +77,7 @@ class RandomCartPolePlayer(PyGamePlayer):
         ##check if game is over
         if self.training ==True:
             if cartpole.get_end() == True:
-
+                ## if score is more than requirement use as training data
                 if self.score >= self.score_requirement:
                     print("Decent Game")
                     self.accepted_scores.append(self.score)
