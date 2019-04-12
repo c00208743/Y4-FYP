@@ -15,9 +15,9 @@ GAMMA = 0.95
 LEARNING_RATE = 0.001
 
 MEMORY_SIZE = 1000000
-BATCH_SIZE = 20
+BATCH_SIZE = 20 # batching sovles overfitting 
 
-EXPLORATION_MAX = 1.0
+EXPLORATION_MAX = 1.0   # cap the EGS value 
 EXPLORATION_MIN = 0.01
 EXPLORATION_DECAY = 0.995
 
@@ -29,22 +29,22 @@ class DQNSolver:
         self.action_space = action_space
         self.memory = deque(maxlen=MEMORY_SIZE)
 
-        self.model = Sequential()
-        self.model.add(Dense(24, input_shape=(observation_space,), activation="relu"))
-        self.model.add(Dense(24, activation="relu"))
-        self.model.add(Dense(self.action_space, activation="linear"))
+        self.model = Sequential() # create model
+        self.model.add(Dense(24, input_shape=(observation_space,), activation="relu")) # input layer
+        self.model.add(Dense(24, activation="relu")) # first layer
+        self.model.add(Dense(self.action_space, activation="linear")) # outer layers
         self.model.compile(loss="mse", optimizer=Adam(lr=LEARNING_RATE))
 
     def remember(self, state, action, reward, next_state, done):
-        self.memory.append((state, action, reward, next_state, done))
+        self.memory.append((state, action, reward, next_state, done)) # records game state for training
 
     def act(self, state):
         if np.random.rand() < self.exploration_rate:
-            return random.randrange(self.action_space)
+            return random.randrange(self.action_space) #explore
         q_values = self.model.predict(state)
-        return np.argmax(q_values[0])
+        return np.argmax(q_values[0]) # exploit
 
-    def experience_replay(self):
+    def experience_replay(self): # batching
         if len(self.memory) < BATCH_SIZE:
             return
         batch = random.sample(self.memory, BATCH_SIZE)
