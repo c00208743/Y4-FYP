@@ -14,8 +14,7 @@ import os
 
 def function_intercept(intercepted_func, intercepting_func):
     """Intercepts a method call and calls the supplied intercepting_func
-    with the result of it's call and it's arguments.  Stolen wholesale
-    from PyGamePlayer.
+    with the result of it's call and it's arguments. 
     - param intercepted_func: The function we are going to intercept
     :param intercepting_func: The function that will get called after
     the intercepted func. It is supplied the return value of the
