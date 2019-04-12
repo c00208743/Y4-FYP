@@ -94,6 +94,7 @@ for episode_number in range(1000):
 				discounted_epr -= np.mean(discounted_epr)
 				discounted_epr /= np.std(discounted_epr)
 
+
 				epdlogp *= discounted_epr # modulate the gradient with advantage (PG magic happens right here.)
 
 	# print epdlogp
@@ -122,11 +123,13 @@ for i in range(test_number):
 	observation = env.reset() # Obtain an initial observation of the environment
 	while True:
 	# Run the policy network and get an action to take.
+			#env.render()
+
 			aprob, _ = policy_forward(observation)
 			action = 1 if np.random.uniform() < aprob else 0 # roll the dice!
 
-			print("probability", aprob)
-			print(action)
+			#print("probability", aprob)
+			#print(action)
 
 	# step the environment and get new measurements
 			observation, reward, done, info = env.step(action)

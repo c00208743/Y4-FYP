@@ -12,7 +12,7 @@ from keras.optimizers import Adam
 class DQNCartPolePlayer(PyGamePlayer):
     def __init__(self):
         """
-        Plays CartPole by choosing moves randomly
+        Plays CartPole using a Deep Q Network to choose the agents next action
         """
         super(DQNCartPolePlayer, self).__init__(run_real_time=True)
         self.last_score = 0
@@ -29,7 +29,7 @@ class DQNCartPolePlayer(PyGamePlayer):
         self.num_actions = 2
         self.observation_space = 4
 
-        ##lazy jamie
+        ## collect scores
         self.scores = []
 
         ##Create Model
@@ -53,10 +53,6 @@ class DQNCartPolePlayer(PyGamePlayer):
             self.state = cartpole.get_state()
             self.state = np.reshape(self.state, [1, self.observation_space])
 
-        #print(self.score)
-
-
-        ##retrun state
         return 0
 
     def get_keys_pressed(self, screen_array, feedback, terminal):

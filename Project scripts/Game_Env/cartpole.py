@@ -44,7 +44,7 @@ class CartPole(object):
         self.poleLength = self.cartHeight * 4
         self.poleThickness = 0.05
 
-        self.force = 0.1
+        self.force = 0.125
 
         self.end = False
 
@@ -54,7 +54,7 @@ class CartPole(object):
                           float(self.trackWidth))
 
         # Initialize the Box2D world.
-        self.world = b2.world(gravity = (0, -10), doSleep = True)
+        self.world = b2.world(gravity = (0, -5), doSleep = True)
 
         # Used for dynamics update and for graphics update.
         self.framesPerSecond = 30

@@ -14,7 +14,7 @@ from collections import Counter
 class RandomCartPolePlayer(PyGamePlayer):
     def __init__(self):
         """
-        Plays CartPole by choosing moves randomly
+        Plays CartPole by choosing the next move with the Networks assumed best probability
         """
         super(RandomCartPolePlayer, self).__init__(run_real_time=True)
         self.last_score = 0
@@ -40,6 +40,7 @@ class RandomCartPolePlayer(PyGamePlayer):
         if self.training ==True:
             self.action_index = random.randrange(0, self.num_actions)
         else:
+            ##else use NN
             if len(self.prev_obseration) == 0:
                 self.action_index = random.randrange(0, self.num_actions)
             else:
@@ -66,7 +67,6 @@ class RandomCartPolePlayer(PyGamePlayer):
             self.game_memory.append([self.observation, self.action_index])
 
 
-        ##get reward
         self.reward = cartpole.get_score()
         self.score += self.reward
 
@@ -152,7 +152,6 @@ class RandomCartPolePlayer(PyGamePlayer):
         return model
 
     def train_model(self, training_data, model=False):
-        #print("??????????????????????????????????")
         #print(training_data)
         X = np.array([i[0] for i in training_data]).reshape(-1, len(training_data[0][0]), 1)
         Y = [i[1] for i in training_data]
