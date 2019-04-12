@@ -9,13 +9,13 @@ import numpy as np
 class PGCartPolePlayer(PyGamePlayer):
     def __init__(self):
         """
-        Plays CartPole by choosing moves with the best policy
+        Plays CartPole by choosing moves with the best parameters to choose the optimal policy
         """
         super(PGCartPolePlayer, self).__init__(run_real_time=True)
         self.last_score = 0
 
-        self.gamma = 0.99
-        self.alpha = 1e-2
+        self.gamma = 0.99 # discount rate over time
+        self.alpha = 1e-2 # learning rate
         self.training_games = 1000
         self.playing_games = 10
         self.playing_reward = 0
@@ -31,8 +31,8 @@ class PGCartPolePlayer(PyGamePlayer):
         ##Create the model
         self.model = {}
 
-        self.model['W1'] = np.random.randn(self.hidden_neurons,self.input_neuron) / np.sqrt(self.input_neuron)
-        self.model['W2'] = np.random.randn(self.hidden_neurons) / np.sqrt(self.hidden_neurons)
+        self.model['W1'] = np.random.randn(self.hidden_neurons,self.input_neuron) / np.sqrt(self.input_neuron) #first set of weights
+        self.model['W2'] = np.random.randn(self.hidden_neurons) / np.sqrt(self.hidden_neurons) # second set of weights
 
         self.grad_buffer = { k : np.zeros_like(v) for k,v in self.model.iteritems() } # update buffers that add up gradients over a batch
         self.rmsprop_cache = { k : np.zeros_like(v) for k,v in self.model.iteritems() } # rmsprop memory
@@ -53,14 +53,14 @@ class PGCartPolePlayer(PyGamePlayer):
 
     def get_keys_pressed(self, screen_array, feedback, terminal):
         if self.training ==True:
-            aprob, h = self.policy_forward(self.observation)
+            aprob, h = self.policy_forward(self.observation) # get action probablity and hidden state
             self.action_index = 1 if np.random.uniform() < aprob else 0
 
             #print("State : " , self.observation)
             #print("Hidden : " , h)
 
             self.xs.append(self.observation) #observation
-            self.hs.append(h) #hidden statek
+            self.hs.append(h) #hidden state array
             y = 1 if self.action_index == 1 else 0 # a "fake label"
 
             self.dlogps.append(y - aprob) # grad that encourages the action that was taken to be taken
