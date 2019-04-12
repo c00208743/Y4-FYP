@@ -13,10 +13,10 @@ class QCartPolePlayer(PyGamePlayer):
         """
         super(QCartPolePlayer, self).__init__(run_real_time=True)
         self.last_score = 0
-        self.max_states = 10**5
-        self.gamma = 0.9
-        self.alpha = 0.01
-        self.epsilon = 1.0
+        self.max_states = 10**5 # max amount of states in q-table
+        self.gamma = 0.9   # discount rate
+        self.alpha = 0.01 # learning rate
+        self.epsilon = 1.0 # Epsilon Greedy Strategy
         self.initial_games = 10000
         # The number of possible actions (left, right)
         self.num_actions = 2
@@ -27,7 +27,7 @@ class QCartPolePlayer(PyGamePlayer):
     def get_state(self):
 
         self.observation = cartpole.get_state()
-        self.state = self.get_state_as_string(self.assign_bins(self.observation, bins))
+        self.state = self.get_state_as_string(self.assign_bins(self.observation, bins)) # set state to string to use as key in dict
 
         return self.state
 
@@ -35,9 +35,9 @@ class QCartPolePlayer(PyGamePlayer):
 
         ##choose action randomly or use EGS
         if np.random.uniform() < self.epsilon:
-            self.action_index = random.randrange(0, self.num_actions)
+            self.action_index = random.randrange(0, self.num_actions) # explore
         else:
-            self.action_index = self.max_dict(self.Q[self.state])[0]
+            self.action_index = self.max_dict(self.Q[self.state])[0] # exploit
 
         if self.action_index == 0:
             action = [K_LEFT]
@@ -89,7 +89,7 @@ class QCartPolePlayer(PyGamePlayer):
 
     ############# Q-Learning #######################
 
-    def max_dict(self, d):
+    def max_dict(self, d): # returns max q value with key
     	max_v = float('-inf')
     	for key, val in d.items():
     		if val > max_v:
@@ -134,7 +134,7 @@ class QCartPolePlayer(PyGamePlayer):
         all_states = self.get_all_states_as_string()
         for state in all_states:
             Q[state] = {}
-            for action in range(self.num_actions):
+            for action in range(self.num_actions): # make q-table with max states and action
                 #print(self.num_actions)
                 Q[state][action] = 0
         return Q
